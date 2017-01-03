@@ -12,15 +12,32 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
 <script>
 import Header from 'components/header/header'
+
+const ERR_OK = 0
+
 export default {
   components: {
     'v-header': Header
+  },
+  data () {
+    return {
+      seller: {}
+    }
+  },
+  created () {
+    // 发送一个AJAX请求获取到数据更新到this.seller
+    this.$http.get('/api/seller').then((response) => {
+      response = response.body
+      if (response.errno === ERR_OK) {
+        this.seller = response.data
+      }
+    })
   }
 }
 </script>

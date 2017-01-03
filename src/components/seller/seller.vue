@@ -3,7 +3,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-export default {}
+export default {
+  props: {
+    seller: Object
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
