@@ -7,3 +7,14 @@ border-1px($color)
     width 100%
     border-top 1px solid $color
     content ''
+
+text($fontSize, $lineHeight, $fontWeight = 400, $color = rgb(7, 17, 27))
+  font-size $fontSize
+  line-height $lineHeight
+  font-weight $fontWeight
+  color $color
+
+bg-image($url)
+  background-image url($url + '@2x.png')
+  @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+    background-image url($url + '@3x.png')
