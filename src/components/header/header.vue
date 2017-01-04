@@ -16,16 +16,24 @@
           <icon :pic="classMap[seller.supports[0].type] + '_1'"></icon>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
-        <div class="support-count" v-if="seller.supports">
+        <div class="support-count" v-if="seller.supports" @click="showDetail">
           <span class="count">{{seller.supports.length}}个</span><span class="icon-keyboard_arrow_right"></span>
         </div>
       </div>
     </div><!-- content-wrapper -->
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <icon pic="bulletin"></icon><span class="bulletin-text">{{ seller.bulletin}}</span><span class="icon-keyboard_arrow_right"></span>
     </div>
     <div class="background">
       <img :src="seller.avatar">
+    </div>
+    <div class="detail" v-show="detailShow">
+      <div class="detail-wrapper">
+        <div class="detail-main"></div>
+      </div>
+      <div class="detail-close" @click="hideDetail">
+        <span class="icon-close"></span>
+      </div><!-- detail -->
     </div>
   </header>
 </template>
@@ -42,6 +50,19 @@ export default {
   },
   components: {
     Icon
+  },
+  methods: {
+    showDetail () {
+      this.detailShow = true
+    },
+    hideDetail () {
+      this.detailShow = false
+    }
+  },
+  data () {
+    return {
+      detailShow: false
+    }
   },
   created () {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
@@ -128,4 +149,19 @@ export default {
     -webkit-filter: blur(10px)
     img
       width 100%
+  .detail
+    position fixed
+    top 0
+    z-index 100
+    width 100%
+    height 100%
+    overflow auto
+    background rgba(7, 17, 27, .8)
+    .detail-main
+      margin-top 64px
+      min-height calc(100vh - 128px)
+    .detail-close
+      width 32px
+      margin 16px auto
+      font-size 32px
 </style>
