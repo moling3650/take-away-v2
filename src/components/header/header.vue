@@ -29,7 +29,30 @@
     </div>
     <div class="detail" v-show="detailShow">
       <div class="detail-wrapper">
-        <div class="detail-main"></div>
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star size="lg" :score="seller.score"></star>
+          </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul class="supports" v-if="seller.supports">
+            <li class="support-item" v-for="(item, index) in seller.supports">
+              <icon :pic="classMap[seller.supports[index].type] + '_2'"></icon><span class="text">{{seller.supports[index].description}}</span>
+            </li>
+          </ul>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">商家公告</div>
+            <div class="line"></div>
+          </div>
+          <div class="bulletin">
+            <p class="content">{{seller.bulletin}}</p>
+          </div>
+        </div>
       </div>
       <div class="detail-close" @click="hideDetail">
         <span class="icon-close"></span>
@@ -40,6 +63,7 @@
 
 <script type="text/ecmascript-6">
 import Icon from 'components/icon/icon'
+import Star from 'components/star/star'
 
 export default {
   props: {
@@ -49,7 +73,8 @@ export default {
     }
   },
   components: {
-    Icon
+    Icon,
+    Star
   },
   methods: {
     showDetail () {
@@ -158,8 +183,41 @@ export default {
     overflow auto
     background rgba(7, 17, 27, .8)
     .detail-main
-      margin-top 64px
+      width 80%
+      margin 64px auto 0 auto
       min-height calc(100vh - 128px)
+      .name
+        margin-bottom 16px
+        text-align center
+        text(16px, 16px, 700, #fff)
+      .star-wrapper
+        margin-bottom 28px
+        text-align center
+      .title
+        display flex
+        margin 28px auto 24px auto
+        .line
+          flex 1
+          position relative
+          top -6px
+          border-bottom 1px solid rgba(255, 255, 255, .2)
+        .text
+          padding 0 12px
+          font-size 14px
+      .supports
+        margin 0 12px
+        text(12px, 12px, 200, #fff)
+        .support-item
+          margin-bottom 12px
+          .icon
+            vertical-align middle
+          .text
+            vertical-align middle
+            margin-left 6px
+      .bulletin
+        margin 0 12px
+        .content
+          text(12px, 24px, 200, #fff)
     .detail-close
       width 32px
       margin 16px auto
