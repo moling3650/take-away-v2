@@ -30,4 +30,9 @@ export default {
           bg-image(s('%s_%s', $pic, $i), 12px, 12px)
         else
           bg-image(s('%s_%s', $pic, $i), 16px, 16px)
+  for $type in on half off
+    for $size in 24 36 48
+      $bg-size = ($size / 2.4) px
+      &.star{$size}_{$type}
+        bg-image(s('star%s_%s', $size, $type), $bg-size, $bg-size)
 </style>
