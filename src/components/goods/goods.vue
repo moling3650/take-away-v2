@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuList">
       <ul class="menu-list">
-        <li class="menu-item" v-for="item in goods">
+        <li class="menu-item" v-for="(item, index) in goods" :class="{'active': currentIndex === index}" @click="selectMenu(index, $event)">
           <p class="content border-1px">
             <icon :pic="picMap[item.type]" v-if="item.type > 0"></icon><span class="text">{{item.name}}</span>
           </p>
@@ -11,7 +11,7 @@
     </div>
     <div class="foods-wrapper" ref="foodList">
       <ul>
-        <li class="food-list" v-for="item in goods">
+        <li class="food-list food-list-hook" v-for="item in goods" >
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li class="food-item border-1px" v-for="food in item.foods">
@@ -53,13 +53,43 @@ export default {
   },
   methods: {
     _initScroll () {
-      this.menuScroll = new BScroll(this.$refs.menuList, {})
-      this.foodScroll = new BScroll(this.$refs.foodList, {})
+      this.menuScroll = new BScroll(this.$refs.menuList, {
+        click: true
+      })
+      this.foodScroll = new BScroll(this.$refs.foodList, {
+        probeType: 3
+      })
+      this.foodScroll.on('scroll', (pos) => {
+        this.scrollY = Math.abs(Math.round(pos.y))
+      })
+    },
+    _calculateHeight () {
+      let foodList = this.$refs.foodList.getElementsByClassName('food-list-hook')
+      for (let i = 0, height = 0; i < foodList.length; i++) {
+        this.listHeight.push(height)
+        height += foodList[i].clientHeight
+      }
+    },
+    selectMenu (index, event) {
+      if (!event._constructed) return
+      let foodList = this.$refs.foodList.getElementsByClassName('food-list-hook')
+      this.foodScroll.scrollToElement(foodList[index], 300)
+    }
+  },
+  computed: {
+    currentIndex () {
+      for (let index = this.listHeight.length; index--;) {
+        if (this.scrollY >= this.listHeight[index]) {
+          return index
+        }
+      }
     }
   },
   data () {
     return {
-      goods: []
+      goods: [],
+      listHeight: [],
+      scrollY: 0
     }
   },
   created () {
@@ -70,6 +100,7 @@ export default {
         this.goods = response.data
         this.$nextTick(() => {
           this._initScroll()
+          this._calculateHeight()
         })
       }
     })
@@ -96,6 +127,14 @@ export default {
       width 56px
       height 54px
       padding 0 12px
+      &.active
+        position relative
+        z-index 10
+        margin-top -1px
+        background #fff
+        .text
+          font-weight bold
+          border-none()
       .content
         display table-cell
         border-1px(rgba(7, 17, 27, .1))
