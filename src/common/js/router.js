@@ -5,6 +5,7 @@ import Seller from 'components/seller/seller'
 
 // 定义路由映射规则
 const routes = [
+  { path: '/', redirect: { path: '/goods' } },
   { path: '/goods', component: Goods },
   { path: '/ratings', component: Ratings },
   { path: '/seller', component: Seller }

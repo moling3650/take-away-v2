@@ -3,12 +3,17 @@ border-1px($color)
   &:after
     display block
     position absolute
+    left 0
     bottom 0
     width 100%
     border-top 1px solid $color
     content ''
 
-text($fontSize, $lineHeight, $fontWeight = 400, $color = rgb(7, 17, 27))
+border-none()
+  &:after
+    display none
+
+text($fontSize, $lineHeight = inherit, $fontWeight = inherit, $color = inherit)
   font-size $fontSize
   line-height $lineHeight
   font-weight $fontWeight
