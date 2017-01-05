@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuList">
       <ul class="menu-list">
         <li class="menu-item" v-for="item in goods">
           <p class="content border-1px">
@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodList">
       <ul>
         <li class="food-list" v-for="item in goods">
           <h1 class="title">{{item.name}}</h1>
@@ -39,6 +39,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
 import Icon from 'components/icon/icon'
 
 const ERR_OK = 0
@@ -49,6 +50,12 @@ export default {
   },
   components: {
     Icon
+  },
+  methods: {
+    _initScroll () {
+      this.menuScroll = new BScroll(this.$refs.menuList, {})
+      this.foodScroll = new BScroll(this.$refs.foodList, {})
+    }
   },
   data () {
     return {
@@ -61,6 +68,9 @@ export default {
       response = response.body
       if (response.errno === ERR_OK) {
         this.goods = response.data
+        this.$nextTick(() => {
+          this._initScroll()
+        })
       }
     })
   }
@@ -109,6 +119,8 @@ export default {
       padding 18px 0
       margin 0 18px
       border-1px(rgba(7, 17, 27, 0.1))
+      &:last-child
+        border-none()
       .icon
         flex 0 0 57px
         width 57px
@@ -136,7 +148,9 @@ export default {
             content '¥'
             text($fontSize:10px, $fontWeight:normal)
         .old
+          margin-left 8px
           text(10px, 24px, blod)
+          text-decoration line-through
           &:before
             content '¥'
             font-weight normal
