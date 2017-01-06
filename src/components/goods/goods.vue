@@ -35,12 +35,14 @@
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minP"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
 import Icon from 'components/icon/icon'
+import Shopcart from 'components/shopcart/shopcart'
 
 const ERR_OK = 0
 
@@ -49,7 +51,8 @@ export default {
     seller: Object
   },
   components: {
-    Icon
+    Icon,
+    Shopcart
   },
   methods: {
     _initScroll () {
