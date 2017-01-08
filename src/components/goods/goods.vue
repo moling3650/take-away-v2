@@ -29,13 +29,16 @@
                   <span class="now">{{food.price}}</span>
                   <span class="old" v-if="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minP"></shopcart>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
   </div>
 </template>
 
@@ -43,6 +46,7 @@
 import BScroll from 'better-scroll'
 import Icon from 'components/icon/icon'
 import Shopcart from 'components/shopcart/shopcart'
+import Cartcontrol from 'components/cartcontrol/cartcontrol'
 
 const ERR_OK = 0
 
@@ -52,7 +56,8 @@ export default {
   },
   components: {
     Icon,
-    Shopcart
+    Shopcart,
+    Cartcontrol
   },
   methods: {
     _initScroll () {
@@ -60,6 +65,7 @@ export default {
         click: true
       })
       this.foodScroll = new BScroll(this.$refs.foodList, {
+        click: true,
         probeType: 3
       })
       this.foodScroll.on('scroll', (pos) => {
@@ -86,6 +92,17 @@ export default {
           return index
         }
       }
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.map((good) => {
+        good.foods.map((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   data () {
@@ -196,4 +213,8 @@ export default {
           &:before
             content '¥'
             font-weight normal
+      .cartcontrol-wrapper
+        position absolute
+        right 0
+        bottom 12px
 </style>
