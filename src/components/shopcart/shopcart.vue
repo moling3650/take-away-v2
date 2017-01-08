@@ -1,12 +1,12 @@
 <template>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" :class="{'hightlight': totalCount > 0}">
         <div class="icon-wrapper"><span class="icon-shopping_cart"></span></div>
-        <div class="price">¥ 0</div><div class="desc">另需配送费 ¥ {{deliveryPrice}}元</div>
+        <div class="price">¥ {{totalPrice}}</div><div class="desc">另需配送费 ¥ {{deliveryPrice}}元</div>
       </div>
-      <div class="content-right">
-        <div class="pay">¥ {{minPrice}}元起送</div>
+      <div class="content-right" :class="payClass">
+        <div class="pay">{{payDesc}}</div>
       </div>
     </div>
   </div>
@@ -22,6 +22,34 @@ export default {
     minPrice: {
       type: Number,
       default: 0
+    },
+    selectFoods: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
+  computed: {
+    totalPrice () {
+      return this.selectFoods.reduce((totalPrice, food) => {
+        return totalPrice + food.price * food.count
+      }, 0)
+    },
+    totalCount () {
+      return this.selectFoods.reduce((totalCount, food) => totalCount + food.count, 0)
+    },
+    payDesc () {
+      if (this.totalPrice === 0) {
+        return `¥ ${this.minPrice}元起送`
+      } else if (this.totalPrice < this.minPrice) {
+        return `还差¥ ${this.minPrice - this.totalPrice}元起送`
+      } else {
+        return '去结算'
+      }
+    },
+    payClass () {
+      return (this.totalPrice < this.minPrice) ? 'not-enough' : 'enough'
     }
   }
 }
@@ -81,8 +109,12 @@ export default {
     .content-right
       flex 0 0 105px
       width 105px
-      background-color #2b333b
       .pay
         text-align center
         text(12px, 48px, bold)
+      &.not-enough
+        background-color #2b333b
+      &.enough
+        background-color #00b43c
+        color #fff
 </style>
